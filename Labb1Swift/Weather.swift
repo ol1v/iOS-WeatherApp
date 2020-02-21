@@ -45,8 +45,5 @@ import CoreLocation
         }
         task.resume()
     }
-        func updateWeatherWithCityName(cityName: String) -> <#return type#> {
-            <#function body#>
-        }
 }
 

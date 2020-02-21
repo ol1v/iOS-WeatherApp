@@ -117,12 +117,18 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Gör webrequest
-        let alertController = UIAlertController(title: "City",
-                                                message: "Selected: \(updatedDataSource[indexPath.row])", preferredStyle: UIAlertController.Style.alert)
+        let alertController = UIAlertController(title: "City:      \(updatedDataSource[indexPath.row])",
+                                                message: "Temp: , condition:", preferredStyle: UIAlertController.Style.alert)
         searchController.isActive = false
         // MARK: Flytta värde till favoriter
-        let okAction = UIAlertAction(title: "Favorite", style: .default, handler: nil)
+        let okAction = UIAlertAction(title: "Favorite", style: .default) {
+            
+            (action:UIAlertAction) in print("You did favorite: \(self.updatedDataSource[indexPath.row])")
+            
+        }
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
         alertController.addAction(okAction)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
