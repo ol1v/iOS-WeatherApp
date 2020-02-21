@@ -43,7 +43,7 @@ class myPosController: UIViewController, CLLocationManagerDelegate {
         self.lon = location.coordinate.longitude
         
         let weather = WeatherApi()
-        weather.updateWeatherOnPosition(lat: self.lat, lon: self.lon) { (result) in
+        weather.updateWeather(lat: self.lat, lon: self.lon, city: nil) { (result) in
             switch result {
             case .success(let WeatherData):
                 DispatchQueue.main.async {

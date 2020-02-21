@@ -117,8 +117,24 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Gör webrequest
-        let alertController = UIAlertController(title: "City:      \(updatedDataSource[indexPath.row])",
-                                                message: "Temp: , condition:", preferredStyle: UIAlertController.Style.alert)
+        var city: String = ""
+        var temp: Double = 0
+        
+        let weather = WeatherApi()
+        weather.updateWeather(lat: 104.00, lon: 99.02024, city: updatedDataSource[indexPath.row]) { (result) in
+            switch result {
+            case .success(let WeatherData):
+                DispatchQueue.main.async {
+                    // Uppdatera UI
+                    city = WeatherData.name
+                    temp = WeatherData.main.temp
+                }
+            case .failure(let error): print("Error: \(error)")
+                }
+        }
+        
+        let alertController = UIAlertController(title: "City:      \(city)",
+                                                message: "Temp: \(temp), condition:", preferredStyle: UIAlertController.Style.alert)
         searchController.isActive = false
         // MARK: Flytta värde till favoriter
         let okAction = UIAlertAction(title: "Favorite", style: .default) {

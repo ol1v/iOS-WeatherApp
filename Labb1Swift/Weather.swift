@@ -15,14 +15,34 @@ import CoreLocation
 
 
     struct WeatherApi {
-    
-    func updateWeatherOnPosition(lat: Double, lon: Double, completion: @escaping( Result<WeatherData, Error>) -> Void) {
-        
+        var CityName: String = ""
+        var CityCondition: String = ""
+        var CityTemp: Double = 0
         let API_KEY: String = "a131ab9c58453d5725f099064cd5b2c4"
+        
+        
+        func updateWeather(lat: Double, lon: Double, city: String?, completion: @escaping( Result<WeatherData, Error>) -> Void) {
+        
+        //let API_KEY: String = "a131ab9c58453d5725f099064cd5b2c4"
         let latitude = lat
         let longitude = lon
+        let myCity: String? = city
+        let noCity: String = "nocity"
+        var myURL: String
+        let urlWithCoordinates = "http://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(API_KEY)&units=metric"
+        //let urlWithCity = "api.openweathermap.org/data/2.5/weather?q=\(myCity)&appid=\(API_KEY)&units=metric"
+            
+        let cityGotValue = myCity ?? noCity
+        
+            if cityGotValue.contains(noCity) {
+                myURL = urlWithCoordinates
+            } else {
+                print(cityGotValue)
+                myURL = "api.openweathermap.org/data/2.5/weather?q=\(cityGotValue)&appid=\(API_KEY)&units=metric"
+                
+            }
         // API Request
-        let task = AF.request("http://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(API_KEY)&units=metric").responseJSON {
+        let task = AF.request(myURL).responseJSON {
             response in
             if let responseError = response.error {
                 print("Something went wrong. Error: \(responseError)")
@@ -45,5 +65,25 @@ import CoreLocation
         }
         task.resume()
     }
+        /*func getWeather(url: String) -> Void {
+           //(APIRequest) updateWeatherOnPosition(url: String) { (result) in
+                switch result {
+                case .success(let WeatherData):
+                    DispatchQueue.main.async {
+                        // Uppdatera UI
+                        self.CityName = WeatherData.name
+                        self.CityCondition = WeatherData.weather.description
+                    }
+                case .failure(let error): print("Error: \(error)")
+                    }
+            }
+        }*/
+        func weatherRequest(latitude: Double, longitude: Double) {
+            
+            let url = "http://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(API_KEY)&units=metric"
+            
+            // getWeather(urlWithCoordinates)
+        }
+        func weatherRequest(cityname: String) {}
 }
 
