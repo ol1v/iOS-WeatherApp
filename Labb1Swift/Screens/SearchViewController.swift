@@ -23,7 +23,6 @@ class SearchViewController: UIViewController {
     var updatedDataSource: [String] = []
     var favoriteCitiesList: [String] = []
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -118,12 +117,14 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Gör webrequest
-        var city: String = "no value"
+        var city: String = updatedDataSource[indexPath.row]
         var temp: Double = 0
         var condition: String = "no value"
+        let cityRequest = city.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
         
+        // API REQUEST WITH CITY
         let weather = WeatherApi()
-        weather.updateWeather(lat: 104.00, lon: 99.02024, city: updatedDataSource[indexPath.row]) { (result) in
+        weather.updateWeather(lat: 104.00, lon: 99.02024, city: cityRequest) { (result) in
             switch result {
             case .success(let WeatherData):
                 DispatchQueue.main.async {
@@ -135,9 +136,10 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
                     let alertController = UIAlertController(title: "\(city)",
                                                             message: "\(temp)°C \(condition)", preferredStyle: UIAlertController.Style.alert)
                     self.searchController.isActive = false
+                    
                     // MARK: Flytta värde till favoriter
                     let okAction = UIAlertAction(title: "Favorite", style: .default) {
-                        
+                        // Lägg till stad i lista
                         
                         (action:UIAlertAction) in self.favoriteCitiesList.append(self.updatedDataSource[indexPath.row])
                         
@@ -152,8 +154,6 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
             case .failure(let error): print("Error: \(error)")
                 }
         }
-        
-        
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return updatedDataSource.count

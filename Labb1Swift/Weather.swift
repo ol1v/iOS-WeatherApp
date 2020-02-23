@@ -20,10 +20,10 @@ import CoreLocation
         var CityTemp: Double = 0
         let API_KEY: String = "a131ab9c58453d5725f099064cd5b2c4"
         
-        
+        // leave city as nil to use coordinates. If city parameter has value
+        // API Request is based on city
         func updateWeather(lat: Double, lon: Double, city: String?, completion: @escaping( Result<WeatherData, Error>) -> Void) {
         
-        //let API_KEY: String = "a131ab9c58453d5725f099064cd5b2c4"
         let latitude = lat
         let longitude = lon
         let myCity: String? = city
@@ -77,6 +77,7 @@ import CoreLocation
                     }
             }
         }*/
+        // Fixa senare
         func weatherRequest(latitude: Double, longitude: Double) {
             
             let url = "http://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(API_KEY)&units=metric"

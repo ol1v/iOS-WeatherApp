@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class FavoritesViewController: UIViewController {
     var favoriteCities: [String] = []
     @IBOutlet weak var tableView: UITableView!
@@ -19,23 +20,21 @@ class FavoritesViewController: UIViewController {
         tableView.dataSource = self
         
     }
-    func addToFavorites(favoriteCity: String) {
-        self.favoriteCities.append(favoriteCity)
-    }
-
-
 }
 extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! MyCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell",for: indexPath)
         
         return cell
         
     }
+ 
     
     
 }
