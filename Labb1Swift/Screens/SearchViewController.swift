@@ -21,6 +21,7 @@ class SearchViewController: UIViewController {
     var searchController: UISearchController!
     var originalDataSource: [String] = []
     var updatedDataSource: [String] = []
+    var favoriteCitiesList: [String] = []
     
     
     override func viewDidLoad() {
@@ -117,8 +118,9 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Gör webrequest
-        var city: String = ""
+        var city: String = "no value"
         var temp: Double = 0
+        var condition: String = "no value"
         
         let weather = WeatherApi()
         weather.updateWeather(lat: 104.00, lon: 99.02024, city: updatedDataSource[indexPath.row]) { (result) in
@@ -128,26 +130,30 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
                     // Uppdatera UI
                     city = WeatherData.name
                     temp = WeatherData.main.temp
+                    condition = WeatherData.weather[0].description
+                    
+                    let alertController = UIAlertController(title: "\(city)",
+                                                            message: "\(temp)°C \(condition)", preferredStyle: UIAlertController.Style.alert)
+                    self.searchController.isActive = false
+                    // MARK: Flytta värde till favoriter
+                    let okAction = UIAlertAction(title: "Favorite", style: .default) {
+                        
+                        
+                        (action:UIAlertAction) in self.favoriteCitiesList.append(self.updatedDataSource[indexPath.row])
+                        
+                    }
+                    
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    alertController.addAction(okAction)
+                    alertController.addAction(cancelAction)
+                    self.present(alertController, animated: true, completion: nil)
                 }
             case .failure(let error): print("Error: \(error)")
                 }
         }
         
-        let alertController = UIAlertController(title: "City:      \(city)",
-                                                message: "Temp: \(temp), condition:", preferredStyle: UIAlertController.Style.alert)
-        searchController.isActive = false
-        // MARK: Flytta värde till favoriter
-        let okAction = UIAlertAction(title: "Favorite", style: .default) {
-            
-            (action:UIAlertAction) in print("You did favorite: \(self.updatedDataSource[indexPath.row])")
-            
-        }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        alertController.addAction(okAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return updatedDataSource.count

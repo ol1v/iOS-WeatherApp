@@ -38,7 +38,7 @@ import CoreLocation
                 myURL = urlWithCoordinates
             } else {
                 print(cityGotValue)
-                myURL = "api.openweathermap.org/data/2.5/weather?q=\(cityGotValue)&appid=\(API_KEY)&units=metric"
+                myURL = "http://api.openweathermap.org/data/2.5/weather?q=\(cityGotValue)&appid=\(API_KEY)&units=metric"
                 
             }
         // API Request
@@ -55,7 +55,6 @@ import CoreLocation
                     //let jsonResponse: WeatherData = JSON(responseStr)
                     let decoder = JSONDecoder()
                     let weather: WeatherData = try decoder.decode(WeatherData.self, from: responseStr)
-                    print("Weather: \(weather.main)")
                     completion(.success(weather))
                     return
                 } catch {
